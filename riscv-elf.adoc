@@ -1190,7 +1190,9 @@ Linker should adjust relocations which refer to those symbol has updated the
 address.
 
 ULEB128 value with relocation must be padding to the same length even if the
-data can be encoded with a shorter byte sequence after linker relaxation.
+data can be encoded with a shorter byte sequence after linker relaxation, The
+linker should report errors if the length of ULEB128 byte sequence is more
+extended than the current byte sequence.
 
 === Linker Relaxation Types
 
