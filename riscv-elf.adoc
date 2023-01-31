@@ -447,9 +447,9 @@ Description:: Additional information about the relocation
                                             <| `ifunc_resolver(B + A)`
 .2+| 59      .2+| PLT32         .2+| Static  | _word32_          .2+| 32-bit relative offset to a function or its PLT entry
                                             <| S + A - P
-.2+| 60      .2+| SET_ULEB128   .2+| Static  | _ULEB128_         .2+| Local label assignment
+.2+| 60      .2+| SET_ULEB128   .2+| Static  | _ULEB128_         .2+| Local label assignment <<uleb128-note,*note>>
                                             <| S + A
-.2+| 61      .2+| SUB_ULEB128   .2+| Static  | _ULEB128_         .2+| Local label subtraction
+.2+| 61      .2+| SUB_ULEB128   .2+| Static  | _ULEB128_         .2+| Local label subtraction <<uleb128-note,*note>>
                                             <| V - S + A
 .2+| 62-191  .2+| *Reserved*                          .2+| -       |                   .2+| Reserved for future standard use
                                             <|
@@ -463,6 +463,12 @@ purpose.  These relocations may conflict with other nonstandard extensions.
 This section and later ones contain fragments written in assembler. The precise
 assembler syntax, including that of the relocations, is described in the
 _RISC-V Assembly Programmer's Manual_ <<rv-asm>>.
+
+[[uleb128-note]]
+NOTE: Assembler must preserve enough space for ULEB128 data with
+R_RISCV_SET_ULEB128 and R_RISCV_SUB_ULEB128 relocation for the linker;
+it can either fill zero and padding to XLEN-bits or fill the precomputed
+result of those relocations into the position of the relocation.
 
 ==== Calculation Symbols
 
