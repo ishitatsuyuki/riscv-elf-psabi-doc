@@ -1060,6 +1060,7 @@ non-standard ABI extensions.
 | Tag_RISCV_priv_spec                 |        8 | uleb128        | *Deprecated*, indicates the major version of the privileged specification.
 | Tag_RISCV_priv_spec_minor           |       10 | uleb128        | *Deprecated*, indicates the minor version of the privileged specification.
 | Tag_RISCV_priv_spec_revision        |       12 | uleb128        | *Deprecated*, indicates the revision version of the privileged specification.
+| Tag_RISCV_gp_reg_usage              |       14 | uleb128        | Indicates the usage definition of the register.
 | Reserved for non-standard attribute | >= 32768 | -              | -
 |===
 
@@ -1164,6 +1165,23 @@ Merge policy:::
 The linker should report errors if object files of different privileged
 specification versions are merged.
 
+===== Tag_RISCV_gp_reg_usage, 14, uleb128=value
+
+Tag_RISCV_gp_reg_usage indicate the usage of gp register, gp could be used for
+global pointer relaxation, reserved platform register or a temporary register.
+
+[horizontal]
+0:: This object use gp as global pointer relaxation.
+1:: This object use gp as platform register.
+2:: This object use gp as temporary register.
+
+--
+
+Merge policy:::
+The linker should report errors if object files of different gp usage
+are merged.
+
+--
 
 === Mapping Symbol
 
@@ -1361,7 +1379,8 @@ Relaxation result:
   load address of a symbol or load/store with a symbol reference into
   global-pointer-relative instruction.
 
-  Condition:: Offset between global-pointer and symbol is within +-2KiB,
+  Condition:: Global-pointer relaxation require Tag_RISCV_gp_reg_usage must be 0,
+  Offset between global-pointer and symbol is within +-2KiB,
   `R_RISCV_PCREL_LO12_I` and `R_RISCV_PCREL_LO12_S` resolved as indirect
   relocation pointer. It will always point to another `R_RISCV_PCREL_HI20`
   relocation, the symbol pointed by `R_RISCV_PCREL_HI20` will be used in
@@ -1415,6 +1434,8 @@ NOTE: The global pointer is referred to as the global offset table pointer in
 many other targets, however, RISC-V uses PC-relative addressing rather than
 access GOT via the global pointer register (`gp`), so we use `gp` register to
 optimize code size and performance of the symbol accessing.
+
+NOTE: Tag_RISCV_gp_reg_usage treat as 0 if its not presented.
 
 ==== Zero-page Relaxation
 

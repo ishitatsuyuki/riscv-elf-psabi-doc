@@ -31,6 +31,9 @@ gp, because signal handlers may rely upon their values.
 The presence of a frame pointer is optional.  If a frame pointer exists,
 it must reside in x8 (s0); the register remains callee-saved.
 
+Platform might use gp register as platform specific register other than used for
+global pointer relaxation.
+
 === Floating-point Register Convention
 
 .Floating-point register convention
